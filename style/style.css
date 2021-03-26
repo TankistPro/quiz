@@ -62,3 +62,20 @@ p {
     margin-top: 10px;
     display: inline;
 }
+
+.finish {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.result {
+    font-size: 26px;
+    text-align: center;
+}
+
+.stat {
+    text-align: center;
+}

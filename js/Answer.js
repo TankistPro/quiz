@@ -28,7 +28,7 @@ class Quiz {
         const $question = document.querySelector('.title');
         var $score = document.querySelector('.userscore')
 
-        $score.innerHTML = this.total;
+        $score.innerText = this.total;
 
         this.isSelect = false
 
@@ -51,16 +51,29 @@ class Quiz {
         if(Number(checkButton.dataset.index) === this.rightAnswer){
             checkButton.classList.remove("check")
             checkButton.classList.add("right")
-            this.total =+ 1
+            this.total += 1
         } else {
             checkButton.classList.remove("check")
             checkButton.classList.add("error")
         }
 
-        if (this.questions.length - 1 > this.currentQuestion) this.currentQuestion += 1
-        else return
+        if (this.questions.length - 1 === this.currentQuestion) {
+            setTimeout(() => this.finish(), 1000);
+        } if (this.questions.length - 1 > this.currentQuestion) {
+            this.currentQuestion += 1
+            setTimeout(() => this.Update(), 1000)
+        } else return
+    }
 
-        setTimeout(() => this.Update(), 1000)
+    finish() {
+        const $questionWrapper = document.querySelector('.question')
+        const $finish = document.querySelector('.finish');
+        console.log(this.total);
+
+        $finish.insertAdjacentHTML("beforeend", `<p class="stat">Ваш результат ${ this.total } из ${ this.questions.length }</p>`);
+
+        $questionWrapper.style.display = "none"
+        $finish.style.display = "block"
     }
 }
 
