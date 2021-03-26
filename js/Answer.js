@@ -4,6 +4,7 @@ class Quiz {
         this.currentQuestion = 0;
         this.total = 0;
         this.isSelect = false;
+        this.imgPath = './images/';
         this.Init()
     }
 
@@ -26,19 +27,26 @@ class Quiz {
     Update() {
         const $buttons = document.querySelectorAll('.answer-btn');
         const $question = document.querySelector('.title');
-        var $score = document.querySelector('.userscore')
+        const $score = document.querySelector('.userscore')
+        const $img = document.querySelector('.image img');
 
         $score.innerText = this.total;
 
         this.isSelect = false
 
         this.rightAnswer = this.questions[this.currentQuestion].indexAnswer;
+        $img.src = this.imgPath + this.questions[this.currentQuestion].imgSrc;
+
         $question.innerText = this.questions[this.currentQuestion].question;
-        $score.innerText =+ this.total;
+        $score.innerText = this.total;
 
         $buttons.forEach(button => {
             button.classList.remove('right')
             button.classList.remove('error')
+
+            if (button.dataset.index == this.rightAnswer) {
+                this.rightAnswerButton = button;
+            }
         })
 
         for (let x = 0; x < this.questions[this.currentQuestion].answer.length; x++) {
@@ -47,7 +55,6 @@ class Quiz {
     }
 
     checkAnswer(checkButton) {
-
         if(Number(checkButton.dataset.index) === this.rightAnswer){
             checkButton.classList.remove("check")
             checkButton.classList.add("right")
@@ -55,8 +62,12 @@ class Quiz {
         } else {
             checkButton.classList.remove("check")
             checkButton.classList.add("error")
+            this.rightAnswerButton.classList.add("right")
         }
+        this.next()
+    }
 
+    next() {
         if (this.questions.length - 1 === this.currentQuestion) {
             setTimeout(() => this.finish(), 1000);
         } if (this.questions.length - 1 > this.currentQuestion) {
@@ -85,35 +96,10 @@ class Answer {
 }
 
 class Question {
-    constructor(question, answers, indexAnswer) {
+    constructor(question, imgSrc, answers, indexAnswer) {
         this.question = question;
+        this.imgSrc = imgSrc;
         this.answer = answers;
         this.indexAnswer = indexAnswer;
     }
 }
-
-const questions = [
-    new Question("В каком году были Олимпийские игры в Сочи?",
-    [
-        new Answer("1999", 0),
-        new Answer("2015", 0),
-        new Answer("2014", 1),
-        new Answer("2022", 0)
-    ], 2),
-    new Question("Начало Воторой Мировой Войны?",
-    [
-        new Answer("1914", 0),
-        new Answer("1945", 0),
-        new Answer("1941", 0),
-        new Answer("1939", 2)
-    ], 3),
-    new Question("Когда был ЧМ мира В Росии",
-    [
-        new Answer("2017", 0),
-        new Answer("2018", 1),
-        new Answer("2007", 0),
-        new Answer("2010", 0)
-    ], 1)
-]
-
-new Quiz(questions)
